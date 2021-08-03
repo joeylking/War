@@ -1,6 +1,36 @@
-class Deck {
-  constructor(cards) {
+const SUITS = ["❤️", "♦️", "♠️", "♣️"];
+const VALUES = [
+  "A",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "J",
+  "Q",
+  "K",
+];
+
+export default class Deck {
+  constructor(cards = newDeck()) {
     this.cards = cards;
+  }
+  get numberOfCards() {
+    return this.cards.length;
+  }
+  shuffle() {
+    //this.cards.sort((a, b) => Math.random() - 0.5);  would work here, but not truly random
+    for (let i = this.numberOfCards - 1; i > 0; i--) {
+      //get random index before current card and swap
+      const newIndex = Math.floor(Math.random() * (i + 1));
+      const oldValue = this.cards[newIndex];
+      this.cards[newIndex] = this.cards[i];
+      this.cards[i] = oldValue;
+    }
   }
 }
 
@@ -9,4 +39,13 @@ class Card {
     this.suit = suit;
     this.value = value;
   }
+}
+
+function newDeck() {
+  //flatMap condenses arrays within arrays, so it gives 1 array of 52 cards instead of 4 arrays of 13 cards
+  return SUITS.flatMap(suit => {
+    return VALUES.map(value => {
+      return new Card(suit, value);
+    });
+  });
 }
